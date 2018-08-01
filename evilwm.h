@@ -1,5 +1,6 @@
 /* evilwm - Minimalist Window Manager for X
  * Copyright (C) 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
+ * 2018 Vyacheslav Kompan (@trexxet)
  * see README for license and other details. */
 
 #include <X11/X.h>
@@ -231,6 +232,9 @@ extern unsigned int     altmask;
 extern char             **opt_term;
 extern int              opt_bw;
 extern int              opt_snap;
+#ifdef SNAPRESIZE
+extern int              no_snap_resize;
+#endif
 #ifdef SOLIDDRAG
 extern int              no_solid_drag;
 #else

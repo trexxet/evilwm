@@ -17,6 +17,9 @@ desktopfilesdir = $(datarootdir)/applications
 ############################################################################
 # Features
 
+# Uncomment to enable window resize to screen half at border snap
+OPT_CPPFLAGS += -DSNAPRESIZE
+
 # Uncomment to enable info banner on holding Ctrl+Alt+I.
 OPT_CPPFLAGS += -DINFOBANNER
 

@@ -1,3 +1,11 @@
+Modified by Vyacheslav Kompan (@trexxet)
+
+Changes:
+
+- add window resize to half screen on snap to screen border
+  included in Makefile; enabled by default; disable with -nosnapresize;
+
+
 evilwm 1.1 by Ciaran Anscomb <evilwm@6809.org.uk>
 
 evilwm is a minimalist window manager for the X Window System.

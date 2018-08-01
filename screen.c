@@ -1,5 +1,6 @@
 /* evilwm - Minimalist Window Manager for X
  * Copyright (C) 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
+ * 2018 Vyacheslav Kompan (@trexxet)
  * see README for license and other details. */
 
 #include <stdio.h>
@@ -272,6 +273,38 @@ static void snap_client(Client *c) {
 		c->y = 0;
 }
 
+#ifdef SNAPRESIZE
+static void snap_resize_client(Client *c) {
+	/* resize window to screen half at border snap */
+	int dpy_width = DisplayWidth(dpy, c->screen->screen);
+	int dpy_height = DisplayHeight(dpy, c->screen->screen);
+
+	if (abs(c->x - c->border) < opt_snap) {
+		maximise_client(c, NET_WM_STATE_ADD, MAXIMISE_VERT);
+		maximise_client(c, NET_WM_STATE_REMOVE, MAXIMISE_HORZ);
+		c->x = 0;
+		c->width = dpy_width / 2;
+	} else
+	if (abs(c->y - c->border) < opt_snap) {
+		maximise_client(c, NET_WM_STATE_ADD, MAXIMISE_HORZ);
+		maximise_client(c, NET_WM_STATE_REMOVE, MAXIMISE_VERT);
+		c->y = 0;
+		c->height = dpy_height / 2;
+	} else
+	if (abs(c->x + c->width + c->border - dpy_width) < opt_snap) {
+		maximise_client(c, NET_WM_STATE_ADD, MAXIMISE_VERT);
+		maximise_client(c, NET_WM_STATE_REMOVE, MAXIMISE_HORZ);
+		c->x = c->width = dpy_width / 2;
+	} else
+	if (abs(c->y + c->height + c->border - dpy_height) < opt_snap) {
+		maximise_client(c, NET_WM_STATE_ADD, MAXIMISE_HORZ);
+		maximise_client(c, NET_WM_STATE_REMOVE, MAXIMISE_VERT);
+		c->y = c->height = dpy_height / 2;
+	}
+	moveresize(c);
+}
+#endif
+
 void drag(Client *c) {
 	XEvent ev;
 	int x1, y1;
@@ -318,6 +351,10 @@ void drag(Client *c) {
 				}
 				break;
 			case ButtonRelease:
+#ifdef SNAPRESIZE
+				if (opt_snap && !no_snap_resize)
+					snap_resize_client(c);
+#endif
 				if (no_solid_drag) {
 					draw_outline(c); /* clear */
 					XUngrabServer(dpy);

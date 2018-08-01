@@ -1,5 +1,6 @@
 /* evilwm - Minimalist Window Manager for X
  * Copyright (C) 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
+ * 2018 Vyacheslav Kompan (@trexxet)
  * see README for license and other details. */
 
 #include <stdlib.h>
@@ -49,6 +50,9 @@ static const char *const def_term[] = { DEF_TERM, NULL };
 char **opt_term = (char **)def_term;
 int          opt_bw = DEF_BW;
 int          opt_snap = 0;
+#ifdef SNAPRESIZE
+int          no_snap_resize = 0; /* resize window to screen half at border snap by default */
+#endif
 #ifdef SOLIDDRAG
 int          no_solid_drag = 0;  /* use solid drag by default */
 #endif
@@ -83,6 +87,9 @@ static struct xconfig_option evilwm_options[] = {
 	{ XCONFIG_INT,      "bw",           &opt_bw },
 	{ XCONFIG_STR_LIST, "term",         &opt_term },
 	{ XCONFIG_INT,      "snap",         &opt_snap },
+#ifdef SNAPRESIZE
+	{ XCONFIG_BOOL,     "nosnapresize", &no_snap_resize },
+#endif
 	{ XCONFIG_STRING,   "mask1",        &opt_grabmask1 },
 	{ XCONFIG_STRING,   "mask2",        &opt_grabmask2 },
 	{ XCONFIG_STRING,   "altmask",      &opt_altmask },
